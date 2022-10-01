@@ -22,13 +22,13 @@ RTC_CONFIGURATION = RTCConfiguration(
 
 def setup_streamlit():
     st.set_page_config(page_title="Face Orienter", layout="centered", page_icon="😀 📐")
-    image = Image.open('resources/gist_logo.png')
+    image = Image.open('resources/face_orient.png.png')
 
     col1, col2, col3 = st.columns(3)
     with col1:
         st.write(' ')
     with col2:
-        st.image(image, width=250, caption='More than just minutes of the meeting!')
+        st.image(image, width=250, caption='Face Orientation using Computer Vision')
     with col3:
         st.write(' ')
 
@@ -50,7 +50,6 @@ def setup_streamlit():
         "home": {"title": "Home", "icon": "house"},
         "face_orienter": {"title": "Face Orienter", "icon": "cloud-upload"},
         "about": {"title": "About", "icon": "activity"},
-        "generate_summary": {"title": "Generate Summary", "icon": "list-task"},
     }
 
     titles = [app["title"] for app in apps.values()]
@@ -74,6 +73,11 @@ def setup_streamlit():
 
 
 def orient():
+    st.title("Application")
+    st.markdown("""
+            [![](https://img.shields.io/badge/GitHub-Source-brightgreen)](https://github.com/akshaybahadur21/FaceOrienter)
+            """)
+
     def draw_line(frame, a, b, color=(255, 255, 0)):
         cv2.line(frame, a, b, color, 10)
 
@@ -174,11 +178,9 @@ def orient():
         async_processing=True,
     )
 
-    st.markdown(
-        "This demo uses a model and code from "
-        "https://github.com/robmarkcole/object-detection-app. "
-        "Many thanks to the project."
-    )
+    st.markdown("""
+                ###### Made with ❤️ and 🦙 by [Akshay Bahadur](https://akshaybahadur.com)
+                """)
 
 
 def home():
@@ -188,9 +190,9 @@ def home():
         """)
     st.subheader("How to use Face Orienter")
     st.markdown("""
-        - Upload meeting transcript using the option in the sidebar.
-        - Click on Generate Insights to see the most important insights from the meeting.
-        - Click on Generate Summary to get a TL;DR of the meeting. 
+        - Click on `Face Orienter` tab
+        - Select the device for webcam access
+        - Click on the video icon and give permissions 
         """)
     st.markdown("""More than just minutes of the meeting! 🚀""")
     st.markdown("""

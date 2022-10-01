@@ -49,7 +49,7 @@ def setup_streamlit():
     apps = {
         "home": {"title": "Home", "icon": "house"},
         "face_orienter": {"title": "Face Orienter", "icon": "emoji-sunglasses"},
-        "readme": {"title": "Readme", "icon": "filetype-md"},
+        "readme": {"title": "Readme", "icon": "file-earmark-richtext"},
     }
 
     titles = [app["title"] for app in apps.values()]

@@ -22,7 +22,7 @@ RTC_CONFIGURATION = RTCConfiguration(
 
 def setup_streamlit():
     st.set_page_config(page_title="Face Orienter", layout="centered", page_icon="😀 📐")
-    image = Image.open('resources/face_orient.png.png')
+    image = Image.open('resources/face_orient.png')
 
     col1, col2, col3 = st.columns(3)
     with col1:

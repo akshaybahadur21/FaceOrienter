@@ -1,3 +1,6 @@
+import math
+from math import atan2
+import queue
 import av
 import cv2
 import dlib
@@ -85,6 +88,16 @@ def orient():
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         subjects = detect(gray, 0)
         for subject in subjects:
+            x2 = subject.right()
+            y2 = subject.bottom()
+
+            deltaY = y2
+            deltaX = x2
+            theta = atan2(deltaY, deltaX)
+            angle = math.degrees(theta)  # angle is in (-180, 180]
+            angle = angle - 26
+            angle = -angle
+
             landmarks = predict(gray, subject)
 
             size = frame.shape
@@ -162,11 +175,16 @@ def orient():
             draw_line(frame, b13, b3, color=(0, 255, 0))
             draw_line(frame, b12, b2, color=(0, 255, 0))
             draw_line(frame, b14, b4, color=(0, 255, 0))
-        return frame
+        return frame, str(round(angle, 4))+"°"
+
+    result_queue = (
+        queue.Queue()
+    )
 
     def callback(frame: av.VideoFrame) -> av.VideoFrame:
         frame = frame.to_ndarray(format="bgr24")
-        annotated_image = _annotate_image(frame)
+        annotated_image, result = _annotate_image(frame)
+        result_queue.put(result)
         return av.VideoFrame.from_ndarray(annotated_image, format="bgr24")
 
     webrtc_ctx = webrtc_streamer(
@@ -178,6 +196,16 @@ def orient():
         async_processing=True,
     )
 
+    if st.checkbox("Show the detected labels", value=True):
+        if webrtc_ctx.state.playing:
+            labels_placeholder = st.empty()
+            while True:
+                try:
+                    result = result_queue.get(timeout=1.0)
+                except queue.Empty:
+                    result = None
+                labels_placeholder.table(result)
+
 
 def home():
     st.title("Home")
@@ -188,7 +216,8 @@ def home():
     st.markdown("""
         - Click on `Face Orienter` tab
         - Select the device for webcam access
-        - Click on the video icon and give permissions 
+        - Click on the `Start` button and give permissions
+        - Move your head to check the orientation. 
         """)
 
 

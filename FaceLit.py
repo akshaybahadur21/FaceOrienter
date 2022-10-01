@@ -3,6 +3,8 @@ import cv2
 import dlib
 import numpy as np
 import streamlit as st
+from streamlit_option_menu import option_menu
+from PIL import Image
 from streamlit_webrtc import (
     RTCConfiguration,
     WebRtcMode,
@@ -18,34 +20,60 @@ RTC_CONFIGURATION = RTCConfiguration(
 )
 
 
-def main():
-    st.header("WebRTC demo")
+def setup_streamlit():
+    st.set_page_config(page_title="Gist", layout="wide", page_icon="⏱️")
+    image = Image.open('resources/gist_logo.png')
 
-    pages = {
-        "Consuming media files on server-side and streaming it to browser (recvonly)": app_object_detection,
-        # noqa: E501
-    }
-    page_titles = pages.keys()
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.write(' ')
+    with col2:
+        st.image(image, width=250, caption='More than just minutes of the meeting!')
+    with col3:
+        st.write(' ')
 
-    page_title = st.sidebar.selectbox(
-        "Choose the app mode",
-        page_titles,
-    )
-    st.subheader(page_title)
-
-    page_func = pages[page_title]
-    page_func()
-
-    st.sidebar.markdown(
+    st.markdown(
         """
----
-<a href="https://www.buymeacoffee.com/whitphx" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" height="50" ></a>
-    """,  # noqa: E501
+        <style>
+        [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+            width: 400px;
+        }
+        [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+            width: 400px;
+            margin-left: -400px;
+        }
+        </style>
+        """,
         unsafe_allow_html=True,
     )
+    apps = {
+        "home": {"title": "Home", "icon": "house"},
+        "face_orienter": {"title": "Face Orienter", "icon": "cloud-upload"},
+        "generate_insights": {"title": "Generate Insights", "icon": "activity"},
+        "generate_summary": {"title": "Generate Summary", "icon": "list-task"},
+    }
+
+    titles = [app["title"] for app in apps.values()]
+    icons = [app["icon"] for app in apps.values()]
+    params = st.experimental_get_query_params()
+
+    if "page" in params:
+        default_index = int(titles.index(params["page"][0].lower()))
+    else:
+        default_index = 0
+
+    with st.sidebar:
+        selected = option_menu(
+            "Main Menu",
+            options=titles,
+            icons=icons,
+            menu_icon="cast",
+            default_index=default_index,
+        )
+    return selected
 
 
-def app_object_detection():
+def orient():
     def draw_line(frame, a, b, color=(255, 255, 0)):
         cv2.line(frame, a, b, color, 10)
 
@@ -151,6 +179,18 @@ def app_object_detection():
         "https://github.com/robmarkcole/object-detection-app. "
         "Many thanks to the project."
     )
+
+
+def main():
+    selected = setup_streamlit()
+    try:
+        if selected.lower() == "home":
+            pass
+        elif selected.lower() == "face orienter":
+            orient()
+    except Exception as e:
+        print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
+
 
 
 if __name__ == "__main__":

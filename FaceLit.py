@@ -207,7 +207,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns([3, 6, 3])
     with col1:
         st.write(' ')
     with col2:

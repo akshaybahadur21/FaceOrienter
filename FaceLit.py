@@ -48,8 +48,8 @@ def setup_streamlit():
     )
     apps = {
         "home": {"title": "Home", "icon": "house"},
-        "face_orienter": {"title": "Face Orienter", "icon": "cloud-upload"},
-        "about": {"title": "About", "icon": "activity"},
+        "face_orienter": {"title": "Face Orienter", "icon": "emoji-sunglasses"},
+        "readme": {"title": "Readme", "icon": "filetype-md"},
     }
 
     titles = [app["title"] for app in apps.values()]
@@ -192,6 +192,12 @@ def home():
         """)
 
 
+def readme():
+    with open("README.md") as file:
+        for line in file:
+            st.markdown(line)
+
+
 def main():
     selected = setup_streamlit()
     try:
@@ -199,8 +205,8 @@ def main():
             home()
         elif selected.lower() == "face orienter":
             orient()
-        elif selected.lower() == "about":
-            pass
+        elif selected.lower() == "readme":
+            readme()
     except Exception as e:
         print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
 

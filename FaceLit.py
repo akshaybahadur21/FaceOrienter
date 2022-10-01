@@ -24,11 +24,11 @@ def setup_streamlit():
     st.set_page_config(page_title="Face Orienter", layout="centered", page_icon="😀 📐")
     image = Image.open('resources/face_orient.png')
 
-    col1, col2, col3 = st.columns([3, 7, 2])
+    col1, col2, col3 = st.columns([3, 6, 3])
     with col1:
         st.write(' ')
     with col2:
-        st.image(image, width=500, caption='Face Orientation using Computer Vision')
+        st.image(image, width=400, caption='Face Orientation using Computer Vision')
     with col3:
         st.write(' ')
 
@@ -212,7 +212,7 @@ if __name__ == "__main__":
         st.write(' ')
     with col2:
         st.markdown("""
-                    ###### Made with ❤️ by Team cPacket | MISM 2022
+                    ###### Made with ❤️ and 🦙 by [Akshay Bahadur](https://akshaybahadur.com)
                     """)
     with col3:
         st.write(' ')

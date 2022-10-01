@@ -1,7 +1,3 @@
-import logging
-import threading
-from pathlib import Path
-
 import av
 import cv2
 import dlib
@@ -16,10 +12,6 @@ from streamlit_webrtc import (
 detect = dlib.get_frontal_face_detector()
 predict = dlib.shape_predictor(
     "model/shape_predictor_68_face_landmarks.dat")  # Dat file is the crux of the code
-
-HERE = Path(__file__).parent
-
-logger = logging.getLogger(__name__)
 
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
@@ -52,11 +44,6 @@ def main():
         unsafe_allow_html=True,
     )
 
-    logger.debug("=== Alive threads ===")
-    for thread in threading.enumerate():
-        if thread.is_alive():
-            logger.debug(f"  {thread.name} ({thread.ident})")
-
 
 def app_object_detection():
     def draw_line(frame, a, b, color=(255, 255, 0)):
@@ -79,7 +66,6 @@ def app_object_detection():
                 (landmarks.part(54).x, landmarks.part(54).y)  # Right mouth corner
             ], dtype="double")
 
-            # 3D model points.
             model_points = np.array([
                 (0.0, 0.0, 0.0),  # Nose tip
                 (0.0, -330.0, -65.0),  # Chin
@@ -89,7 +75,7 @@ def app_object_detection():
                 (150.0, -150.0, -125.0)  # Right mouth corner
 
             ])
-            # Camera internals
+
             focal_length = size[1]
             center = (size[1] / 2, size[0] / 2)
             camera_matrix = np.array(
@@ -98,7 +84,7 @@ def app_object_detection():
                  [0, 0, 1]], dtype="double"
             )
 
-            dist_coeffs = np.zeros((4, 1))  # Assuming no lens distortion
+            dist_coeffs = np.zeros((4, 1))
             (success, rotation_vector, translation_vector) = cv2.solvePnP(model_points, image_points, camera_matrix,
                                                                           dist_coeffs)
 
@@ -168,22 +154,4 @@ def app_object_detection():
 
 
 if __name__ == "__main__":
-    import os
-
-    DEBUG = os.environ.get("DEBUG", "false").lower() not in ["false", "no", "0"]
-
-    logging.basicConfig(
-        format="[%(asctime)s] %(levelname)7s from %(name)s in %(pathname)s:%(lineno)d: "
-               "%(message)s",
-        force=True,
-    )
-
-    logger.setLevel(level=logging.DEBUG if DEBUG else logging.INFO)
-
-    st_webrtc_logger = logging.getLogger("streamlit_webrtc")
-    st_webrtc_logger.setLevel(logging.DEBUG)
-
-    fsevents_logger = logging.getLogger("fsevents")
-    fsevents_logger.setLevel(logging.WARNING)
-
     main()

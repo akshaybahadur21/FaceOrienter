@@ -3,8 +3,8 @@ import cv2
 import dlib
 import numpy as np
 import streamlit as st
-from streamlit_option_menu import option_menu
 from PIL import Image
+from streamlit_option_menu import option_menu
 from streamlit_webrtc import (
     RTCConfiguration,
     WebRtcMode,
@@ -21,7 +21,7 @@ RTC_CONFIGURATION = RTCConfiguration(
 
 
 def setup_streamlit():
-    st.set_page_config(page_title="Gist", layout="wide", page_icon="⏱️")
+    st.set_page_config(page_title="Face Orienter", layout="centered", page_icon="😀 📐")
     image = Image.open('resources/gist_logo.png')
 
     col1, col2, col3 = st.columns(3)
@@ -49,7 +49,7 @@ def setup_streamlit():
     apps = {
         "home": {"title": "Home", "icon": "house"},
         "face_orienter": {"title": "Face Orienter", "icon": "cloud-upload"},
-        "generate_insights": {"title": "Generate Insights", "icon": "activity"},
+        "about": {"title": "About", "icon": "activity"},
         "generate_summary": {"title": "Generate Summary", "icon": "list-task"},
     }
 
@@ -181,16 +181,34 @@ def orient():
     )
 
 
+def home():
+    st.title("Home")
+    st.markdown("""
+        [![](https://img.shields.io/badge/GitHub-Source-brightgreen)](https://github.com/akshaybahadur21/FaceOrienter)
+        """)
+    st.subheader("How to use Face Orienter")
+    st.markdown("""
+        - Upload meeting transcript using the option in the sidebar.
+        - Click on Generate Insights to see the most important insights from the meeting.
+        - Click on Generate Summary to get a TL;DR of the meeting. 
+        """)
+    st.markdown("""More than just minutes of the meeting! 🚀""")
+    st.markdown("""
+        ###### Made with ❤️ and 🦙 by [Akshay Bahadur](https://akshaybahadur.com)
+        """)
+
+
 def main():
     selected = setup_streamlit()
     try:
         if selected.lower() == "home":
-            pass
+            home()
         elif selected.lower() == "face orienter":
             orient()
+        elif selected.lower() == "about":
+            pass
     except Exception as e:
         print(f"{type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
-
 
 
 if __name__ == "__main__":

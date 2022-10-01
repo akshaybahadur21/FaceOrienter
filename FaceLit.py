@@ -85,6 +85,7 @@ def orient():
         cv2.line(frame, a, b, color, 10)
 
     def _annotate_image(frame):
+        angle = 0
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         subjects = detect(gray, 0)
         for subject in subjects:
@@ -175,7 +176,7 @@ def orient():
             draw_line(frame, b13, b3, color=(0, 255, 0))
             draw_line(frame, b12, b2, color=(0, 255, 0))
             draw_line(frame, b14, b4, color=(0, 255, 0))
-        return frame, str(round(angle, 4))+"°"
+        return frame, ["Angle", str(round(angle, 2)) + "°"]
 
     result_queue = (
         queue.Queue()
@@ -196,7 +197,7 @@ def orient():
         async_processing=True,
     )
 
-    if st.checkbox("Show the detected labels", value=True):
+    if st.checkbox("Show the angle", value=True):
         if webrtc_ctx.state.playing:
             labels_placeholder = st.empty()
             while True:

@@ -16,3 +16,7 @@ You can install Conda for python which resolves all the dependencies for machine
 ## References 🔱
  
  -  [AI Coordinator](https://github.com/ai-coodinator/Face_orientation)
+
+<div align="center">
+Made with ❤️ and 🦙 by Akshay Bahadur
+</div>

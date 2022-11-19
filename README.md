@@ -15,7 +15,7 @@ You can install Conda for python which resolves all the dependencies for machine
 </div>
 
 ## References 🔱
- 
+ -  Ivan Grishchenko and Valentin Bazarevsky, Research Engineers, Google Research [Mediapipe by Google](https://github.com/google/mediapipe)
  -  [AI Coordinator](https://github.com/ai-coodinator/Face_orientation)
 
 <div align="center">
